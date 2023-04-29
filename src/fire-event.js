@@ -15,29 +15,29 @@ Object.keys(dtlFireEvent).forEach(key => {
 // @link https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/react-dom/src/events/EnterLeaveEventPlugin.js#L24-L31
 const mouseEnter = fireEvent.mouseEnter
 const mouseLeave = fireEvent.mouseLeave
-fireEvent.mouseEnter = (...args) => {
-  mouseEnter(...args)
+fireEvent.mouseEnter = async (...args) => {
+  await mouseEnter(...args)
   return fireEvent.mouseOver(...args)
 }
-fireEvent.mouseLeave = (...args) => {
-  mouseLeave(...args)
+fireEvent.mouseLeave = async (...args) => {
+  await mouseLeave(...args)
   return fireEvent.mouseOut(...args)
 }
 
 const pointerEnter = fireEvent.pointerEnter
 const pointerLeave = fireEvent.pointerLeave
-fireEvent.pointerEnter = (...args) => {
-  pointerEnter(...args)
+fireEvent.pointerEnter = async (...args) => {
+  await pointerEnter(...args)
   return fireEvent.pointerOver(...args)
 }
-fireEvent.pointerLeave = (...args) => {
-  pointerLeave(...args)
+fireEvent.pointerLeave = async (...args) => {
+  await pointerLeave(...args)
   return fireEvent.pointerOut(...args)
 }
 
 const select = fireEvent.select
 fireEvent.select = async (node, init) => {
-  select(node, init)
+  await select(node, init)
   // React tracks this event only on focused inputs
   node.focus()
 
