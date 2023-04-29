@@ -36,7 +36,7 @@ fireEvent.pointerLeave = (...args) => {
 }
 
 const select = fireEvent.select
-fireEvent.select = (node, init) => {
+fireEvent.select = async (node, init) => {
   select(node, init)
   // React tracks this event only on focused inputs
   node.focus()
@@ -49,7 +49,7 @@ fireEvent.select = (node, init) => {
   // - keyDown
   // so we can use any here
   // @link https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/react-dom/src/events/SelectEventPlugin.js#L203-L224
-  fireEvent.keyUp(node, init)
+  await fireEvent.keyUp(node, init)
 }
 
 // React event system tracks native focusout/focusin events for
@@ -57,12 +57,12 @@ fireEvent.select = (node, init) => {
 // @link https://github.com/facebook/react/pull/19186
 const blur = fireEvent.blur
 const focus = fireEvent.focus
-fireEvent.blur = (...args) => {
-  fireEvent.focusOut(...args)
+fireEvent.blur = async (...args) => {
+  await fireEvent.focusOut(...args)
   return blur(...args)
 }
-fireEvent.focus = (...args) => {
-  fireEvent.focusIn(...args)
+fireEvent.focus = async (...args) => {
+  await fireEvent.focusIn(...args)
   return focus(...args)
 }
 
