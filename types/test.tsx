@@ -59,7 +59,7 @@ export async function testSVGRenderOptions() {
 
 export async function testFireEvent() {
   const {container} = await render(<button />)
-  fireEvent.click(container)
+  await fireEvent.click(container)
 }
 
 export async function testDebug() {
