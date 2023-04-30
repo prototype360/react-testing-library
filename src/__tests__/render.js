@@ -162,8 +162,8 @@ test('hydrate can have a wrapper', async () => {
   expect(wrapperComponentMountEffect).toHaveBeenCalledTimes(1)
 })
 
-test('legacyRoot uses legacy ReactDOM.render', () => {
-  expect(async () => {
+test('legacyRoot uses legacy ReactDOM.render', async () => {
+  await expect(async () => {
     await render(<div />, {legacyRoot: true})
   }).toErrorDev(
     [
@@ -173,11 +173,11 @@ test('legacyRoot uses legacy ReactDOM.render', () => {
   )
 })
 
-test('legacyRoot uses legacy ReactDOM.hydrate', () => {
+test('legacyRoot uses legacy ReactDOM.hydrate', async () => {
   const ui = <div />
   const container = document.createElement('div')
   container.innerHTML = ReactDOMServer.renderToString(ui)
-  expect(async () => {
+  await expect(async () => {
     await render(ui, {container, hydrate: true, legacyRoot: true})
   }).toErrorDev(
     [
