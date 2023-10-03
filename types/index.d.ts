@@ -11,6 +11,8 @@ import {
 import {Renderer} from 'react-dom'
 import {act as reactAct} from 'react-dom/test-utils'
 
+export * from '@testing-library/dom'
+
 export type FireFunction = (
   ...parameters: Parameters<DTLFireFunction>
 ) => Promise<ReturnType<DTLFireFunction>>
@@ -169,5 +171,3 @@ export function cleanup(): Promise<void>
  * `act` for the DOM renderer
  */
 export function act<T>(scope: () => T): Promise<T>
-
-export * from '@testing-library/dom'
