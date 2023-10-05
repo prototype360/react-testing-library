@@ -1,5 +1,5 @@
 import React from 'react'
-import {renderHook} from '../pure'
+import {renderHook} from '../'
 
 afterEach(() => {
   jest.resetAllMocks()
