@@ -5,11 +5,25 @@ import {
   Queries,
   BoundFunction,
   prettyFormat,
+  FireFunction as DTLFireFunction,
+  FireObject as DTLFireObject,
 } from '@testing-library/dom'
 import {Renderer} from 'react-dom'
 import {act as reactAct} from 'react-dom/test-utils'
 
 export * from '@testing-library/dom'
+
+export type FireFunction = (
+  ...parameters: Parameters<DTLFireFunction>
+) => Promise<ReturnType<DTLFireFunction>>
+
+export type FireObject = {
+  [K in keyof DTLFireObject]: (
+    ...parameters: Parameters<DTLFireObject[K]>
+  ) => Promise<ReturnType<DTLFireObject[K]>>
+}
+
+export const fireEvent: FireFunction & FireObject
 
 export type RenderResult<
   Q extends Queries = typeof queries,
@@ -26,8 +40,8 @@ export type RenderResult<
     maxLength?: number,
     options?: prettyFormat.OptionsReceived,
   ) => void
-  rerender: (ui: React.ReactElement) => void
-  unmount: () => void
+  rerender: (ui: React.ReactElement) => Promise<void>
+  unmount: () => Promise<void>
   asFragment: () => DocumentFragment
 } & {[P in keyof Q]: BoundFunction<Q[P]>}
 
@@ -92,17 +106,17 @@ export function render<
 >(
   ui: React.ReactElement,
   options: RenderOptions<Q, Container, BaseElement>,
-): RenderResult<Q, Container, BaseElement>
+): Promise<RenderResult<Q, Container, BaseElement>>
 export function render(
   ui: React.ReactElement,
   options?: Omit<RenderOptions, 'queries'>,
-): RenderResult
+): Promise<RenderResult>
 
 export interface RenderHookResult<Result, Props> {
   /**
    * Triggers a re-render. The props will be passed to your renderHook callback.
    */
-  rerender: (props?: Props) => void
+  rerender: (props?: Props) => Promise<void>
   /**
    * This is a stable reference to the latest value returned by your renderHook
    * callback
@@ -117,7 +131,7 @@ export interface RenderHookResult<Result, Props> {
    * Unmounts the test component. This is useful for when you need to test
    * any cleanup your useEffects have.
    */
-  unmount: () => void
+  unmount: () => Promise<void>
 }
 
 export interface RenderHookOptions<
@@ -146,18 +160,14 @@ export function renderHook<
 >(
   render: (initialProps: Props) => Result,
   options?: RenderHookOptions<Props, Q, Container, BaseElement>,
-): RenderHookResult<Result, Props>
+): Promise<RenderHookResult<Result, Props>>
 
 /**
  * Unmounts React trees that were mounted with render.
  */
-export function cleanup(): void
+export function cleanup(): Promise<void>
 
 /**
- * Simply calls ReactDOMTestUtils.act(cb)
- * If that's not available (older version of react) then it
- * simply calls the given callback immediately
+ * `act` for the DOM renderer
  */
-export const act: typeof reactAct extends undefined
-  ? (callback: () => void) => void
-  : typeof reactAct
+export function act<T>(scope: () => T): Promise<T>

@@ -1,15 +1,15 @@
 import * as React from 'react'
 import {render} from '../'
 
-test('rerender will re-render the element', () => {
+test('rerender will re-render the element', async () => {
   const Greeting = props => <div>{props.message}</div>
-  const {container, rerender} = render(<Greeting message="hi" />)
+  const {container, rerender} = await render(<Greeting message="hi" />)
   expect(container.firstChild).toHaveTextContent('hi')
-  rerender(<Greeting message="hey" />)
+  await rerender(<Greeting message="hey" />)
   expect(container.firstChild).toHaveTextContent('hey')
 })
 
-test('hydrate will not update props until next render', () => {
+test('hydrate will not update props until next render', async () => {
   const initialInputElement = document.createElement('input')
   const container = document.createElement('div')
   container.appendChild(initialInputElement)
@@ -18,7 +18,7 @@ test('hydrate will not update props until next render', () => {
   const firstValue = 'hello'
   initialInputElement.value = firstValue
 
-  const {rerender} = render(<input value="" onChange={() => null} />, {
+  const {rerender} = await render(<input value="" onChange={() => null} />, {
     container,
     hydrate: true,
   })
@@ -26,6 +26,6 @@ test('hydrate will not update props until next render', () => {
   expect(initialInputElement).toHaveValue(firstValue)
 
   const secondValue = 'goodbye'
-  rerender(<input value={secondValue} onChange={() => null} />)
+  await rerender(<input value={secondValue} onChange={() => null} />)
   expect(initialInputElement).toHaveValue(secondValue)
 })
